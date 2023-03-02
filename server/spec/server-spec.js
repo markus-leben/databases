@@ -16,12 +16,16 @@ describe('Persistent Node Chat Server', () => {
   beforeAll((done) => {
     dbConnection.connect();
 
-       const tablename = ''; // TODO: fill this out
-
     /* Empty the db table before all tests so that multiple tests
      * (or repeated runs of the tests)  will not fail when they should be passing
      * or vice versa */
+
+    const tablename = 'messages'; // clear messages
     dbConnection.query(`truncate ${tablename}`, done);
+
+    // should we clear user?
+    // const roomname = 'rooms'; // clear rooms
+    // dbConnection.query(`truncate ${roomname}`, done);
   }, 6500);
 
   afterAll(() => {
@@ -48,9 +52,11 @@ describe('Persistent Node Chat Server', () => {
 
         dbConnection.query(queryString, queryArgs, (err, results) => {
           if (err) {
+            console.log('error in dbConnection');
             throw err;
           }
           // Should have one result:
+          console.log(`results: ${results}`);
           expect(results.length).toEqual(1);
 
           // TODO: If you don't have a column named text, change this test.
@@ -59,16 +65,19 @@ describe('Persistent Node Chat Server', () => {
         });
       })
       .catch((err) => {
+        console.log('failed to connect to API');
         throw err;
       });
   });
 
   it('Should output all messages from the DB', (done) => {
     // Let's insert a message into the db
-       const queryString = '';
+       const queryString = 'SQL CODE GOES HERE'; //
        const queryArgs = [];
     /* TODO: The exact query string and query args to use here
      * depend on the schema you design, so I'll leave them up to you. */
+
+    // do we have to assign message and roomname, if so do we do them here or in query?
     dbConnection.query(queryString, queryArgs, (err) => {
       if (err) {
         throw err;
@@ -77,9 +86,9 @@ describe('Persistent Node Chat Server', () => {
       // Now query the Node chat server and see if it returns the message we just inserted:
       axios.get(`${API_URL}/messages`)
         .then((response) => {
-          const messageLog = response.data;
-          expect(messageLog[0].text).toEqual(message);
-          expect(messageLog[0].roomname).toEqual(roomname);
+          const messageLog = response.data; //server responds with a list of all messages
+          expect(messageLog[0].text).toEqual(message); //the first item of which should equal our original message
+          expect(messageLog[0].roomname).toEqual(roomname); //and should have the same room
           done();
         })
         .catch((err) => {

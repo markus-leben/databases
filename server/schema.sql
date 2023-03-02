@@ -6,17 +6,17 @@ USE chat;
 DROP TABLE IF EXISTS messages;
 CREATE TABLE messages (
   /* Describe your table here.*/
-  ID int NOT NULL,
+  ID int NOT NULL AUTO_INCREMENT,
   BODY varchar(255),
   PRIMARY KEY (ID)
 );
 
 /* Create other tables and define schemas for them here! */
 
-DROP TABLE IF EXISTS rooms;
-CREATE TABLE rooms (
+DROP TABLE IF EXISTS users;
+CREATE TABLE users (
   /* Describe your table here.*/
-  ID int NOT NULL,
+  ID int NOT NULL AUTO_INCREMENT,
   NAME varchar(255),
   PRIMARY KEY (ID)
 );
